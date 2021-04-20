@@ -1,4 +1,3 @@
-// import { withLatestFrom } from "./Observable";
 const ObservableObj = new Observable();
 
 var currentBallRotation = 0;
@@ -46,16 +45,20 @@ const rouletteWheelNumbers = [
 ];
 
 const getRouletteWheelNumber = index => {
-  let rouletteCount = rouletteWheelNumbers.length;
-  let i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
+  const rouletteCount = rouletteWheelNumbers.length;
 
+  let i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
   i = i >= rouletteCount ? i % rouletteCount : i;
-  let number = rouletteWheelNumbers[i];
-  return number;
+
+  return rouletteWheelNumbers[i];
 };
 
 const getRouletteWheelColor = index => {
-  const i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
+  const rouletteCount = rouletteWheelNumbers.length;
+
+  let i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
+  i = i >= rouletteCount ? i % rouletteCount : i;
+  
   return i == 0 ? "green" : i % 2 == 0 ? "black" : "red";
 };
 
@@ -95,7 +98,6 @@ function startRotation(speed) {
   const resultColor = getRouletteWheelColor(newWheelIndex);
   (() => {
     const newRotaion = currentWheelRotation + (360 / 37) * speed;
-    // console.log(getRouletteWheelNumber(currentWheelIndex), "---> ", result);
     var myAnimation = anime({
       targets: [".layer-2", ".layer-4"],
       rotate: function () {
@@ -105,9 +107,7 @@ function startRotation(speed) {
         return 5000;
       },
       loop: 1,
-      // easing: "cubicBezier(0.010, 0.990, 0.855, 1.010)",
       easing: `cubicBezier(${bezier.join(",")})`,
-      // easing: "cubicBezier(0.000, 1.175, 0.980, 0.990)",
       complete: (...args) => {
         currentWheelRotation = newRotaion;
         currentWheelIndex = newWheelIndex;
@@ -117,15 +117,23 @@ function startRotation(speed) {
 
   (() => {
     const newRotaion = -4 * 360 + currentBallRotation;
-    // console.log("newRotaion", newRotaion);
+    let translateY = [
+      { value: 0, duration: 2000 },
+      { value: 10, duration: 1000 },
+      { value: 15, duration: 900 },
+      { value: 50, duration: 1000 }
+    ];
+    
+    if(window.innerWidth < 485) {
+      translateY[0].value = 0;
+      translateY[1].value = 5;
+      translateY[2].value = 5;
+      translateY[3].value = 30;
+    }
+    
     var myAnimation1 = anime({
       targets: ".ball-container",
-      translateY: [
-        { value: 0, duration: 2000 },
-        { value: 20, duration: 1000 },
-        { value: 25, duration: 900 },
-        { value: 50, duration: 1000 }
-      ],
+      translateY,
       rotate: [{ value: newRotaion, duration: 4000 }],
       duration: function () {
         return 4000; // anime.random(800, 1400);
@@ -201,20 +209,5 @@ ObservableObj.zip(documentEvent("touchstart"))(
 ).subscribe({
   next: tryRotate
 });
-
-ObservableObj.pipe(
-  ObservableObj.withLatestFrom(documentEvent("touchmove"))(ObservableObj.fromEvent(document, "touchend")),
-  ObservableObj.map(([_, r]) => r)
-).subscribe({
-  // next: e => console.log(e)
-});
-
-document.querySelector(".roulette-wheel").addEventListener(
-  "touchmove",
-  e => {
-    e.preventDefault();
-  },
-  { passive: false }
-);
 
 window.startRotation = startRotation;

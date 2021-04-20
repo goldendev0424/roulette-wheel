@@ -1,3 +1,10 @@
+.result {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .flipper {
   display: inline-block;
   position: relative;
@@ -6,8 +13,9 @@
   transition: all 2s cubic-bezier(0.240, 1.650, 0.915, 0.835);
   transform-style: preserve-3d;
   font-family: monospace;
-  user-select: none;
+  margin: 0 10px 20px;
 }
+
 .flipper.flip {
   transform: rotateX(90deg);
 }
@@ -43,31 +51,25 @@
   outline: solid 2px;
 }
 
-.flip.red {
-  .back-face {
-    background-color: #c52703;
-  }
+.flip.red .back-face {
+  background-color: #c52703;
 }
 
-.flip.black {
-  .back-face {
-    background-color: #242324;
-  }
+.flip.black .back-face {
+  background-color: #242324;
 }
 
-.flip.green {
-  .back-face {
-    background-color: #436410;
-  }
+.flip.green .back-face {
+  background-color: #436410;
 }
 
-.result {
-  max-width: 500px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-
+@media screen and (max-width: 485px) {
   .flipper {
-    margin: 0 10px 20px;
+    width: 18vw;
+    height: 27vw;
+  }
+
+  .back-face {
+    font-size: 15vw;
   }
 }

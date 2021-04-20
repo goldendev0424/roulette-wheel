@@ -65,9 +65,26 @@ body {
   border-radius: 7px;
   background: #fff radial-gradient(circle at 5px 5px, #fff, #444);
   box-shadow: 1px 1px 4px #000;
-  transform: translateY(-116px);
+  transform: translate(0, -153px);
   top: 50%;
   left: 50%;
-  margin: -7px;
+  margin: 0 -7px;
   will-change: transform
+}
+
+@media screen and (max-width: 485px) {
+  .roulette-wheel {
+    width: 240px;
+    height: 240px;
+    background-size: 240px 240px;
+  }
+  .roulette-wheel .layer-2, .roulette-wheel .layer-3, .roulette-wheel .layer-4, .roulette-wheel .layer-5, .roulette-wheel .ball-container {
+    background-size: 240px 240px
+  }
+  .roulette-wheel .ball {
+    width: 8px;
+    height: 8px;
+    transform: translate(0, -95px);
+    margin: 0 -5px;
+  }
 }

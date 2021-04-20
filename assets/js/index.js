@@ -1,9 +1,5 @@
-import "./styles.scss";
-import "./flipper.scss";
-import anime from "animejs";
-import { map, zip, fromEvent, pipe, withLatestFrom } from "./Observable";
-
-window.anime = anime;
+// import { withLatestFrom } from "./Observable";
+const ObservableObj = new Observable();
 
 var currentBallRotation = 0;
 var currentWheelRotation = 0;
@@ -53,10 +49,10 @@ const getRouletteWheelNumber = index => {
   let rouletteCount = rouletteWheelNumbers.length;
   let i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
 
-  i = i >=  rouletteCount ? i % rouletteCount : i;
+  i = i >= rouletteCount ? i % rouletteCount : i;
   let number = rouletteWheelNumbers[i];
   return number;
-}
+};
 
 const getRouletteWheelColor = index => {
   const i = index >= 0 ? index % 37 : 37 - Math.abs(index % 37);
@@ -102,10 +98,10 @@ function startRotation(speed) {
     // console.log(getRouletteWheelNumber(currentWheelIndex), "---> ", result);
     var myAnimation = anime({
       targets: [".layer-2", ".layer-4"],
-      rotate: function() {
+      rotate: function () {
         return newRotaion;
       },
-      duration: function() {
+      duration: function () {
         return 5000;
       },
       loop: 1,
@@ -131,7 +127,7 @@ function startRotation(speed) {
         { value: 50, duration: 1000 }
       ],
       rotate: [{ value: newRotaion, duration: 4000 }],
-      duration: function() {
+      duration: function () {
         return 4000; // anime.random(800, 1400);
       },
       loop: 1,
@@ -168,9 +164,9 @@ function isInRadiusEl(el, x, y) {
 }
 
 const documentEvent = eventName =>
-  pipe(
-    fromEvent(document, eventName),
-    map(e =>
+  ObservableObj.pipe(
+    ObservableObj.fromEvent(document, eventName),
+    ObservableObj.map(e =>
       e.type == "touchstart" || e.type == "touchmove"
         ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
         : { x: e.clientX, y: e.clientY }
@@ -193,22 +189,22 @@ const tryRotate = ([p0, p1]) => {
   }
 };
 
-zip(documentEvent("mousedown"))(documentEvent("mouseup")).subscribe({
+ObservableObj.zip(documentEvent("mousedown"))(documentEvent("mouseup")).subscribe({
   next: tryRotate
 });
 
-zip(documentEvent("touchstart"))(
-  pipe(
-    withLatestFrom(documentEvent("touchmove"))(fromEvent(document, "touchend")),
-    map(([_, r]) => r)
+ObservableObj.zip(documentEvent("touchstart"))(
+  ObservableObj.pipe(
+    ObservableObj.withLatestFrom(documentEvent("touchmove"))(ObservableObj.fromEvent(document, "touchend")),
+    ObservableObj.map(([_, r]) => r)
   )
 ).subscribe({
   next: tryRotate
 });
 
-pipe(
-  withLatestFrom(documentEvent("touchmove"))(fromEvent(document, "touchend")),
-  map(([_, r]) => r)
+ObservableObj.pipe(
+  ObservableObj.withLatestFrom(documentEvent("touchmove"))(ObservableObj.fromEvent(document, "touchend")),
+  ObservableObj.map(([_, r]) => r)
 ).subscribe({
   // next: e => console.log(e)
 });

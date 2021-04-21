@@ -69,7 +69,7 @@ function wheelStart() {
 
   var backAnimation = anime({
     targets: ['.layer-2', '.layer-4'],
-    rotate: 360,
+    rotate: 720,
     easing: 'linear',
     loop: true,
   });
@@ -99,8 +99,8 @@ function wheelStop(resultNumber) {
     return item === resultNumber
   });
 
-  let newRotaion = 360 - (360 / rouletteWheelNumbers.length) * i
-  newRotaion = newRotaion < 180 ? newRotaion + 360 : newRotaion;
+  let newRotaion = 720 - (360 / rouletteWheelNumbers.length) * i
+  // newRotaion = newRotaion < 180 ? newRotaion + 360 : newRotaion;
 
   anime({
     targets: [".layer-2", ".layer-4"],

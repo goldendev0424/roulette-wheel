@@ -11,6 +11,7 @@ body {
   user-select: none;
   touch-action: pan-y;
   padding: 0 10px;
+  overflow-y: hidden;
 }
 
 #app {

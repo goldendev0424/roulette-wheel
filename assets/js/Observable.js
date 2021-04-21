@@ -52,7 +52,7 @@ function Observable() {
       }
     }
   }
-
+ 
   class Observable {
     constructor(_subscribe) {
       this._subscribe = _subscribe;
